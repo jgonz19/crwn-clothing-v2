@@ -2,9 +2,11 @@ import { initializeApp } from "firebase/app"; // initializeApp create the instan
 import { getAuth, 
          //signInWithRedirect, 
          signInWithPopup,
-         GoogleAuthProvider, 
+         GoogleAuthProvider,
+         signInWithEmailAndPassword,
          createUserWithEmailAndPassword,
-         sendPasswordResetEmail} from "firebase/auth";  //authentication package come with firebase package
+         //sendPasswordResetEmail
+        } from "firebase/auth";  //authentication package come with firebase package
 import {
         getFirestore,
        
@@ -36,6 +38,7 @@ const firebaseConfig = {
   provider.setCustomParameters({ //multiple provider are possible due to kind of sigin(popup/signInWithRedirect)
     prompt: "select_account",
   });
+
 
 export const auth = getAuth(); // it should be the same auth for any website/app
 export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
@@ -71,3 +74,11 @@ export const createAuthUserWithEmailAndPassword = async (email, password) => {
 
     return await createUserWithEmailAndPassword(auth, email, password);
 }
+
+export const signInAuthWithEmailAndPassword = async (email, password) => {
+    if(!email || !password) return;
+
+    return await signInWithEmailAndPassword(auth, email, password);
+}
+
+
