@@ -1,9 +1,20 @@
-import { Fragment } from "react";// react is usefull if you dont want to render some of the html elemnet
+import { Fragment, useContext } from "react";// react is usefull if you dont want to render some of the html element
 import { Link, Outlet } from "react-router-dom";
 import { ReactComponent as CrwnLogo} from "../../assets/crown.svg";
-import "./navigation-styles.scss"
+import CartIcon from "../../compenents/cart-icon/cart-icon.component";
+import CartDropdown from "../../compenents/cart-dropdown/cart-dropdown.component";
+import { UserContext } from "../../contexts/user.context";
+import { CartContext } from "../../contexts/cart.context";
+import "./navigation-styles.scss";
+
+import {signOutUser} from '../../utils/firebase/firebase.utils'
+
+
+//if we have a condition and then component, in case both are true we will return the last component{isCartOpen}
 // Link is use to proper laberage(etiquetar) the proper url. read by the browsers. behaves like anchor tag <a>
 const Navigation = () => {
+    const {currentUser} = useContext(UserContext);
+    const {isCartOpen} = useContext(CartContext);
     return(
       <Fragment>
         <div className="navigation">
@@ -14,11 +25,21 @@ const Navigation = () => {
             <Link className='nav-link' to='/shop'>
                 SHOP
             </Link>
-            <Link className='nav-link' to='/auth'>
-                SIGN IN
-            </Link>
+              {
+                currentUser ? 
+                (
+                  <span className="nav-link" onClick={signOutUser}>SIGN OUT</span>
+                )
+                  :
+                (
+                  <Link className='nav-link' to='/auth'>
+                    SIGN IN
+                  </Link>
+                )
+              }
+              <CartIcon />
             </div>
-          <div></div>
+            {isCartOpen && <CartDropdown />}
         </div>
         <Outlet />
       </Fragment>

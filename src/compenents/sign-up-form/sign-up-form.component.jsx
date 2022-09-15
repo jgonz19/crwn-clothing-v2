@@ -4,7 +4,6 @@ import Button from "../button/button.component";
 import FormInput from "../form-input/form-input.component";
 import "./sign-up-form.style.scss"
 
-
 const defaultFormFields = {
     displayName: '',
     email: '',
@@ -27,6 +26,7 @@ const SignUpform = () =>{
             return;
         }
         try{
+    
             const {user} = await createAuthUserWithEmailAndPassword(email, password);
             await createUserDocumentFromAuth(user,{displayName});
             resetFormFields();
@@ -36,7 +36,6 @@ const SignUpform = () =>{
             }else{
                 console.log('User created encountere an error', error);
             }
-            
         }
     }
 

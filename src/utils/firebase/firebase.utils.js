@@ -6,6 +6,8 @@ import { getAuth,
          signInWithEmailAndPassword,
          createUserWithEmailAndPassword,
          //sendPasswordResetEmail
+         signOut,
+         onAuthStateChanged,//this method will give us back a listener, to prove if you r logged in or not
         } from "firebase/auth";  //authentication package come with firebase package
 import {
         getFirestore,
@@ -81,4 +83,7 @@ export const signInAuthWithEmailAndPassword = async (email, password) => {
     return await signInWithEmailAndPassword(auth, email, password);
 }
 
+export const signOutUser = async () => await signOut(auth);
+
+export const onAuthStateChangedListener = (callback) => onAuthStateChanged(auth, callback);
 

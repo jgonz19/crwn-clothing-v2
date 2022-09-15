@@ -2,6 +2,8 @@ import { useState } from "react";
 import { signInWithGooglePopup, signInAuthWithEmailAndPassword} from "../../utils/firebase/firebase.utils";
 import Button from "../button/button.component";
 import FormInput from "../form-input/form-input.component";
+
+
 import "./sign-in-form.style.scss"
 
 
@@ -10,7 +12,7 @@ const defaultFormFields = {
     password: '',
 }
 
-const SignUpform = () =>{
+const SignInform = () =>{
     const [formFields, setFormFields] = useState(defaultFormFields);
     const {email, password} = formFields;
 
@@ -22,8 +24,8 @@ const SignUpform = () =>{
         event.preventDefault();
        
         try{
-            const response = await signInAuthWithEmailAndPassword(email, password);
-            console.log(response);
+            const {user} = await signInAuthWithEmailAndPassword(email, password);
+
             resetFormFields();
         }catch(error){
             switch(error.code){
@@ -40,12 +42,13 @@ const SignUpform = () =>{
     }
 
     const signInWithGoogle = async () =>{
-        const {user} = await signInWithGooglePopup();
+        await signInWithGooglePopup();
     }
 
     const handleChange = (event) =>{
         const {name, value} = event.target;//this word "name" will be used on the html element as prop to identiy the element that is updating
                                     //target is aiming the exact element(input)
+
         setFormFields({...formFields, [name]:value});//we set all the formfields with this sintaxys, 
                                                     // second argument, asign the array to the respective value
     }
@@ -58,7 +61,6 @@ const SignUpform = () =>{
                 Sign in with your email and password
             </span>
             <form onSubmit={handleSubmit}>
-              
                 <FormInput
                     label="Email"
                     type="email" 
@@ -67,7 +69,6 @@ const SignUpform = () =>{
                     name="email" 
                     value={email} 
                 />
-
                 <FormInput 
                     label="Password"
                     type="password" 
@@ -81,9 +82,8 @@ const SignUpform = () =>{
                     <Button button='' buttonType='google' onClick={signInWithGoogle}>Google sign in</Button>
                 </div>
             </form>
-           
         </div>
     )
 }
 
-export default SignUpform;
+export default SignInform;
