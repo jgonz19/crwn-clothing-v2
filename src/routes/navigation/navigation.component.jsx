@@ -1,8 +1,8 @@
 import { Fragment, useContext } from "react";// react is usefull if you dont want to render some of the html element
 import { Link, Outlet } from "react-router-dom";
 import { ReactComponent as CrwnLogo} from "../../assets/crown.svg";
-import CartIcon from "../../compenents/cart-icon/cart-icon.component";
-import CartDropdown from "../../compenents/cart-dropdown/cart-dropdown.component";
+import CartIcon from "../../components/cart-icon/cart-icon.component";
+import CartDropdown from "../../components/cart-dropdown/cart-dropdown.component";
 import { UserContext } from "../../contexts/user.context";
 import { CartContext } from "../../contexts/cart.context";
 import "./navigation-styles.scss";
