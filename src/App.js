@@ -18,7 +18,7 @@ const App = () => {
     <Routes>
       <Route path='/' element={<Navigation />} >
         <Route index element={<Home />}  />
-        <Route path='shop' element={<Shop />}  />
+        <Route path='shop/*' element={<Shop />}  /> {/** slash and  * (/* means that i does not matter what the uri is, it will render the shop component. however the shop component has his own routes) */}
         <Route path='auth' element={<Authentication />}  />
         <Route path='checkout' element={<CheckOut />}  />
       </Route>

@@ -1,20 +1,25 @@
 import { initializeApp } from "firebase/app"; // initializeApp create the instance for based on configuration
-import { getAuth, 
-         //signInWithRedirect, 
-         signInWithPopup,
-         GoogleAuthProvider,
-         signInWithEmailAndPassword,
-         createUserWithEmailAndPassword,
-         //sendPasswordResetEmail
-         signOut,
-         onAuthStateChanged,//this method will give us back a listener, to prove if you r logged in or not
-        } from "firebase/auth";  //authentication package come with firebase package
+import { 
+    getAuth, 
+    //signInWithRedirect, 
+    signInWithPopup,
+    GoogleAuthProvider,
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    //sendPasswordResetEmail
+    signOut,
+    onAuthStateChanged,//this method will give us back a listener, to prove if you r logged in or not
+    } from "firebase/auth";  //authentication package come with firebase package
 import {
-        getFirestore,
-       
-        doc, 
-        getDoc,
-        setDoc } from "firebase/firestore";
+    getFirestore,
+    doc, 
+    getDoc,
+    setDoc,
+    collection,
+    writeBatch,
+    query, 
+    getDocs
+    } from "firebase/firestore";
         //import some methods, getFirestore to instatiate
         //doc to retrieve the docs instance
         //getDoc to access the data
@@ -48,6 +53,33 @@ export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
 
 export const db = getFirestore();
 
+//collectionKey is the name of the category: hats, sneakers
+export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
+    const collectionRef = collection(db, collectionKey);// first argu pull the database and second takes the collection we are looking for       
+    //writeBatch to create a bach so we can add all object to this collectionRef in one successful transaction
+    const batch = writeBatch(db);
+
+    objectsToAdd.forEach((object)=>{
+        const docRef = doc(collectionRef,object.title.toLowerCase());
+        batch.set(docRef, object);
+    });
+    await batch.commit();
+    console.log("done")
+};
+
+export const getCategoriesAndDocuments = async () => {
+    const collectionRef = collection(db, 'categories');
+    const q = query(collectionRef);
+
+    const querySnapshot = await getDocs(q);
+    const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot)=>{
+        const {title, items} = docSnapshot.data();
+        acc[title.toLowerCase()] = items;
+        return acc;
+    },{})
+    return categoryMap;
+}
+
 export const createUserDocumentFromAuth = async (userAuth, additionalInformation = {}) => {
     if(!userAuth) return; 
     const userDocRef = doc(db, 'users', userAuth.uid);// doc takes 3 argument(database, collection,identifier(id))
@@ -66,9 +98,7 @@ export const createUserDocumentFromAuth = async (userAuth, additionalInformation
             console.log('error creating the user', err.message);
         }
     }
-
     return userDocRef;
-
 };
 
 export const createAuthUserWithEmailAndPassword = async (email, password) => {

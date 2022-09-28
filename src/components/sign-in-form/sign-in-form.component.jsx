@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { signInWithGooglePopup, signInAuthWithEmailAndPassword} from "../../utils/firebase/firebase.utils";
-import Button from "../button/button.component";
+import Button, {BUTTON_TYPES_CLASSES} from "../button/button.component";
 import FormInput from "../form-input/form-input.component";
 
 
-import "./sign-in-form.style.scss"
+import {SignUpContainer, ButtonsContainer} from "./sign-in-form.style.jsx"
 
 
 const defaultFormFields = {
@@ -54,7 +54,7 @@ const SignInform = () =>{
 
     return(
         //eventhandler onSubmit get trigger with button child with type="submit". callback function is needed
-        <div className="sign-up-container">
+        <SignUpContainer>
             <h2>Already have an account?</h2>
             <span>
                 Sign in with your email and password
@@ -76,12 +76,12 @@ const SignInform = () =>{
                     name="password" 
                     value={password} 
                 />
-                <div className="buttons-container">
+                <ButtonsContainer>
                     <Button type="submit">Sign In</Button>
-                    <Button button='' buttonType='google' onClick={signInWithGoogle}>Google sign in</Button>
-                </div>
+                    <Button buttonType={BUTTON_TYPES_CLASSES.google} type=''onClick={signInWithGoogle}>Google sign in</Button>
+                </ButtonsContainer>
             </form>
-        </div>
+        </SignUpContainer>
     )
 }
 
